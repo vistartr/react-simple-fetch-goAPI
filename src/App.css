@@ -1,0 +1,108 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+/* ... (gaya yang sudah ada) ... */
+
+.loading {
+  font-size: 1.5em;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.menu-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px; /* Jarak antar kartu */
+  padding: 20px;
+}
+
+.food-card {
+  background-color: #282c34;
+  border: 1px solid #61dafb;
+  border-radius: 8px;
+  padding: 20px;
+  width: 250px;
+  text-align: left;
+  transition: transform 0.2s;
+}
+
+.food-card:hover {
+  transform: scale(1.05);
+}
+
+.food-card h3 {
+  margin-top: 0;
+  color: #61dafb;
+}
+
+.food-card .price {
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #fff;
+  margin-top: 15px;
+}
+
+.food-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+  margin-bottom: 20px;
+}
+
+.food-form input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.food-form button {
+  padding: 10px;
+  background-color: #61dafb;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
