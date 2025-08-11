@@ -1,52 +1,6 @@
-// import React, { useState, useEffect } from "react";
-// import "./App.css";
 
-// function App() {
-//   const [foodData, setFoodData] = useState(null);
 
-//   useEffect(() => {
-//     fetch("http://localhost:8080/food")
-//       .then((response) => response.json())
-//       .then((data) => {
-//         console.log("Food has arrived!", data);
-//         setFoodData(data);
-//       })
-//       .catch((error) => {
-//         console.log("Error fetching food:", error);
-//       });
-//   }, []);
 
-//   if (!foodData) {
-//     return <div>Loading the menu...</div>;
-//   }
-
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <h1>Welcome to our restaurant</h1>
-//         <h2>Our Restaurant Menu</h2>
-
-//         {foodData.map(food => (
-//           <div key={food.name} className ="food-card">
-//             <h3>{food.name}</h3>
-//             <p>{food.description}</p>
-//             <p className="price"> $ {food.price.toFixed(2)}</p>
-//           </div>
-
-//         ))}
-
-//         {/* <div className="menu-container">
-//           <h3>{foodData.name}
-//           <p>{foodData.description}</p>
-//           <p className="price">${foodData.price.toFixed(2)}</p>
-//           </h3>
-//         </div> */}
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
 
 import React, { useState, useEffect } from "react";
 import "./App.css";
@@ -75,6 +29,25 @@ function App() {
     setFoodData([...foodData, newFood]);
   };
 
+  const handleDelete = (idToDelete) => {
+    // Tampilkan konfirmasi sebelum menghapus
+    if (window.confirm("Apakah Anda yakin ingin menghapus menu ini?")) {
+      fetch(`http://localhost:8080/food/${idToDelete}`, {
+        method: 'DELETE',
+      })
+      .then(response => {
+        if (response.ok) {
+          // Jika berhasil, update state dengan memfilter item yang dihapus
+          setFoodData(foodData.filter(food => food.id !== idToDelete));
+        } else {
+          // Handle error jika ada
+          console.error("Gagal menghapus makanan");
+        }
+      })
+      .catch(error => console.error("Error:", error));
+    }
+  };
+
   if (!foodData) {
     return <div className="loading">Loading the menu...</div>;
   }
@@ -99,18 +72,26 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {/* Tambahkan komponen form kita di sini */}
         <AddFoodForm onFoodAdded={handleFoodAdded} />
-
         <hr style={{ width: "80%", margin: "40px 0" }} />
-
         <h1>Our Restaurant Menu</h1>
         <div className="menu-container">
           {foodData.map((food) => (
+            // Gunakan food.id untuk key, ini praktik terbaik
             <div key={food.id} className="food-card">
               <h3>{food.name}</h3>
               <p>{food.description}</p>
               <p className="price">Rp {food.price.toFixed(3)}</p>
+
+              {/* --- TOMBOL-TOMBOL BARU --- */}
+              <div className="card-actions">
+                <button className="edit-btn">Edit</button>
+                {/* Tambahkan onClick handler untuk memanggil fungsi handleDelete */}
+                <button className="delete-btn" onClick={() => handleDelete(food.id)}>
+                  Hapus
+                </button>
+              </div>
+
             </div>
           ))}
         </div>

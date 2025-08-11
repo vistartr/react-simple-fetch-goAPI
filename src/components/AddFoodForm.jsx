@@ -56,7 +56,7 @@ function AddFoodForm({ onFoodAdded }) {
         required
       />
       <input
-        type="number"
+        type="text"
         placeholder="Price"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
