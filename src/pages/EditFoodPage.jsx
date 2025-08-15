@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Impor hooks baru
+import { useParams, useNavigate } from "react-router-dom";
+import { getFoodById, updateFood } from "../services/foodService"; // Impor service
 
 function EditFoodPage() {
   const [food, setFood] = useState({ name: "", description: "", price: "" });
-  const { id } = useParams(); // Hook untuk mengambil 'id' dari URL
-  const navigate = useNavigate(); // Hook untuk melakukan redirect/navigasi
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  // 1. Ambil data makanan yang akan diedit dari server saat komponen dimuat
   useEffect(() => {
-    fetch(`http://localhost:8080/food/${id}`)
-      .then((res) => res.json())
+    // Gunakan service untuk mengambil data
+    getFoodById(id)
       .then((data) => {
-        setFood(data); // Isi state dengan data dari server
+        setFood(data);
       })
       .catch((err) => console.error(err));
-  }, [id]); // Efek ini dijalankan setiap kali 'id' berubah
+  }, [id]);
 
-  // 2. Fungsi untuk menangani perubahan pada input form
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFood((prevFood) => ({
@@ -25,28 +24,26 @@ function EditFoodPage() {
     }));
   };
 
-  // 3. Fungsi untuk mengirim data yang sudah diubah ke server
   const handleSubmit = (event) => {
     event.preventDefault();
     const foodToUpdate = {
-        ...food,
-        price: parseFloat(food.price) // Pastikan harga adalah angka
-    }
+      ...food,
+      price: parseFloat(food.price),
+    };
 
-    fetch(`http://localhost:8080/food/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(foodToUpdate),
-    })
-      .then((res) => res.json())
+    // Gunakan service untuk mengupdate data
+    updateFood(id, foodToUpdate)
       .then(() => {
         alert("Menu berhasil diupdate!");
-        navigate("/"); // Redirect kembali ke halaman utama
+        navigate("/");
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        alert(`Gagal mengupdate: ${err.message}`);
+      });
   };
 
-  if (!food) return <div>Loading...</div>;
+  if (!food.name) return <div>Loading...</div>;
 
   return (
     <div className="edit-form-container">

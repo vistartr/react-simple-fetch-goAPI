@@ -1,7 +1,3 @@
-
-
-
-
 // import React, { useState, useEffect } from "react";
 // import "./App.css";
 // // Impor komponen form yang baru kita buat
@@ -102,22 +98,47 @@
 
 // export default App;
 
-
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import FoodListPage from "./pages/FoodListPage";
-import EditFoodPage from "./pages/EditFoodPage";
-import "./App.css";
+import React from 'react';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth'; // <-- Pastikan path ini benar
+import FoodListPage from './pages/FoodListPage';
+import EditFoodPage from './pages/EditFoodPage';
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import './App.css';
 
 function App() {
+  const { token, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <div className="App">
+      <nav className="main-nav">
+        <Link to="/">Menu Restoran</Link>
+        <div className="nav-auth-links">
+          {token ? (
+            <button onClick={handleLogout} className="nav-link-button">
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/register">Register</Link>
+              <Link to="/login">Login</Link>
+            </>
+          )}
+        </div>
+      </nav>
+
       <header className="App-header">
         <Routes>
-          {/* Rute untuk halaman utama (daftar makanan) */}
           <Route path="/" element={<FoodListPage />} />
-
-          {/* Rute untuk halaman edit, :id adalah parameter dinamis */}
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/food/edit/:id" element={<EditFoodPage />} />
         </Routes>
       </header>
